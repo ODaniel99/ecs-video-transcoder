@@ -1,0 +1,10 @@
+Parameters:
+  InputBucketName:
+    Description: Name of  the S3 input bucket
+    Type: String
+    Default: ecs-video-transcoder-input-bucket
+Resources:
+  InputBucket: 
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref InputBucketName
