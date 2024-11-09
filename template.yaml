@@ -30,7 +30,7 @@ Parameters:
     Default: 80
   ContainerCpu:
     Type: String
-    Default: 2
+    Default: 256
   ContainerMemory:
     Type: String
     Default: 1GB
