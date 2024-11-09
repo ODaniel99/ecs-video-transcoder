@@ -328,13 +328,9 @@ Resources:
       - Id: dump-data-ecs-task
         RoleArn: !Ref TaskRole
         EcsParameters:
-          TaskDefinitionArn:
-            Ref: TaskDefinition
+          TaskDefinitionArn: !Ref TaskDefinition
           TaskCount: 1
-        Arn:
-          Fn::GetAtt:
-          - Cluster
-          - Arn
+        Arn: !Ref Cluster
 
   ############################################################
   #              ECS TARGET GROUP
