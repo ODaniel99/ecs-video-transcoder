@@ -326,11 +326,11 @@ Resources:
       State: ENABLED
       Targets:
       - Id: dump-data-ecs-task
-        RoleArn: !Ref TaskRole
+        RoleArn: !GetAtt TaskRole.Arn
         EcsParameters:
           TaskDefinitionArn: !Ref TaskDefinition
           TaskCount: 1
-        Arn: !Ref Cluster
+        Arn: !GetAtt Cluster.Arn
 
   ############################################################
   #              ECS TARGET GROUP
