@@ -322,7 +322,7 @@ Resources:
     Properties:
       Description: dump data every workday at 10
       Name: dump-data
-      ScheduleExpression: cron(*/5 * * * *) 
+      ScheduleExpression: rate(5 minutes)
       State: ENABLED
       Targets:
       - Id: dump-data-ecs-task
