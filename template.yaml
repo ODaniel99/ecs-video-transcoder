@@ -220,16 +220,7 @@ Resources:
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: !Ref ServiceName
-          Image:
-            !Join [
-              ".",
-              [
-                !Ref AWS::AccountId,
-                "dkr.ecr",
-                !Ref AWS::Region,
-                !Sub "amazonaws.com/ecr-repository:${ImageTag}",
-              ],
-            ]
+          Image: "hello-world:latest"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           # Send logs to CloudWatch Logs
