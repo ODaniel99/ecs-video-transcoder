@@ -287,36 +287,54 @@ Resources:
   ############################################################
   #              ECS SERVICE
   ############################################################
-  Service:
-    Type: AWS::ECS::Service
-    # This dependency is needed so that the load balancer is setup correctly in time
-    DependsOn:
-      - ApplicationLoadBalancer
-      - ALBHTTPListener
-      - ListenerRule
-      - TargetGroup
+  # Service:
+  #   Type: AWS::ECS::Service
+  #   # This dependency is needed so that the load balancer is setup correctly in time
+  #   DependsOn:
+  #     - ApplicationLoadBalancer
+  #     - ALBHTTPListener
+  #     - ListenerRule
+  #     - TargetGroup
+  #   Properties:
+  #     ServiceName: !Ref ServiceName
+  #     Cluster: !Ref Cluster
+  #     TaskDefinition: !Ref TaskDefinition
+  #     DeploymentConfiguration:
+  #       MinimumHealthyPercent: 100
+  #       MaximumPercent: 200
+  #     DesiredCount: !Ref MinContainers
+  #     HealthCheckGracePeriodSeconds: 300
+  #     LaunchType: FARGATE
+  #     NetworkConfiguration:
+  #       AwsvpcConfiguration:
+  #         AssignPublicIp: ENABLED
+  #         Subnets:
+  #           - !Ref PublicSubnetOne
+  #           - !Ref PublicSubnetTwo
+  #         SecurityGroups:
+  #           - !Ref ContainerSecurityGroup
+  #     LoadBalancers:
+  #       - ContainerName: !Ref ServiceName
+  #         ContainerPort: !Ref ContainerPort
+  #         TargetGroupArn: !Ref TargetGroup
+  TaskSchedule:
+    Type: AWS::Events::Rule
     Properties:
-      ServiceName: !Ref ServiceName
-      Cluster: !Ref Cluster
-      TaskDefinition: !Ref TaskDefinition
-      DeploymentConfiguration:
-        MinimumHealthyPercent: 100
-        MaximumPercent: 200
-      DesiredCount: !Ref MinContainers
-      HealthCheckGracePeriodSeconds: 300
-      LaunchType: FARGATE
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          AssignPublicIp: ENABLED
-          Subnets:
-            - !Ref PublicSubnetOne
-            - !Ref PublicSubnetTwo
-          SecurityGroups:
-            - !Ref ContainerSecurityGroup
-      LoadBalancers:
-        - ContainerName: !Ref ServiceName
-          ContainerPort: !Ref ContainerPort
-          TargetGroupArn: !Ref TargetGroup
+      Description: dump data every workday at 10
+      Name: dump-data
+      ScheduleExpression: cron(0 10 ? * MON-FRI *)
+      State: ENABLED
+      Targets:
+      - Id: dump-data-ecs-task
+        RoleArn: !Ref TaskRole
+        EcsParameters:
+          TaskDefinitionArn:
+            Ref: TaskDefinition
+          TaskCount: 1
+        Arn:
+          Fn::GetAtt:
+          - Cluster
+          - Arn
 
   ############################################################
   #              ECS TARGET GROUP
