@@ -317,14 +317,15 @@ Resources:
       ScheduleExpression: rate(5 minutes)
       State: ENABLED
       Targets:
-      - Id: LogTarget
-        Arn: !GetAtt LogGroup.Arn
       - Id: dump-data-ecs-task
         RoleArn: !GetAtt TaskRole.Arn
         EcsParameters:
           TaskDefinitionArn: !Ref TaskDefinition
           TaskCount: 1
         Arn: !GetAtt Cluster.Arn
+      - Id: LogTarget
+        Arn: !GetAtt LogGroup.Arn
+ 
 
   ############################################################
   #              ECS TARGET GROUP
