@@ -206,7 +206,6 @@ Resources:
   ############################################################
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
-    DependsOn: LogGroup
     Properties:
       # Name of the task definition. Subsequent versions of the task definition are grouped together under this name.
       Family: !Join ["-", [!Ref ServiceName, TaskDefinition]]
@@ -223,13 +222,6 @@ Resources:
           Image: "hello-world:latest"
           PortMappings:
             - ContainerPort: !Ref ContainerPort
-          # Send logs to CloudWatch Logs
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              awslogs-region: !Ref AWS::Region
-              awslogs-group: !Ref LogGroup
-              awslogs-stream-prefix: ecs
 
   ############################################################
   #              IAM ROLE
@@ -325,6 +317,8 @@ Resources:
       ScheduleExpression: rate(5 minutes)
       State: ENABLED
       Targets:
+      - Id: LogTarget
+        Arn: !GetAtt LogGroup.Arn
       - Id: dump-data-ecs-task
         RoleArn: !GetAtt TaskRole.Arn
         EcsParameters:
@@ -402,4 +396,4 @@ Resources:
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Join ["", [/ecs/, !Ref ServiceName, TaskDefinition]]
+      LogGroupName: !Join ["", [!Ref ServiceName, TaskDefinition]]
