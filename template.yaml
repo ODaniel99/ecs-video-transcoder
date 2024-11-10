@@ -251,6 +251,26 @@ Resources:
               Service: ecs-tasks.amazonaws.com
             Action: "sts:AssumeRole"
 
+  RoleCWLogsDelivery:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: 'sts:AssumeRole'
+      Policies:
+        PolicyName: "AllowLogging"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              Effect: "Allow"
+              Action:
+                - "logs:*"
+              Resource: "*"
+
   ############################################################
   #              SECURITY GROUP
   ############################################################
