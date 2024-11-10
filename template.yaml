@@ -343,9 +343,9 @@ Resources:
           TaskDefinitionArn: !Ref TaskDefinition
           TaskCount: 1
         Arn: !GetAtt Cluster.Arn
-      - Id: LogTarget
+      -
         Arn: !GetAtt LogGroup.Arn
- 
+        Id: LogTarget
 
   ############################################################
   #              ECS TARGET GROUP
